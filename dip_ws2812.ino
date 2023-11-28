@@ -22,4 +22,8 @@ for(int i=0;i<2;i++){
   for(int j=0;j<ws2812b.n_leds;j++){ ws2812b.led(j,0xff0000,true); delay(100); }  ws2812b.clear(); delay(250);
   for(int j=ws2812b.n_leds-1;j>=0;j--){ ws2812b.led(j,0x0000ff,true); delay(100); } ws2812b.clear(); delay(250);
 }
+for(int i=0;i<20;i++){
+  ws2812b.clear(0xff00); delay(50); ws2812b.clear(); delay(50);
+}
+
 }
