@@ -46,22 +46,11 @@ void clear(){ for(int i=0;i<n_leds;i++) led(i,0); show(); } // off all leds
 void times(uint32_t nt0h,uint32_t nt0l,uint32_t nt1h,uint32_t nt1l){ T0H=nt0h/25; T0L=nt0l/25; T1H=nt1h/25;  T1L=nt1l/25; }
 void rgb(uint8_t nl,uint8_t r,uint8_t g,uint8_t b,bool showf=false){ if (nl<n_leds) { *((uint32_t *)ramtable+nl)=g<<16|r<<8|b; if (showf) show(); } }
 void led(uint8_t nl,uint32_t vl,bool showf=false){  if (nl<n_leds) rgb(nl,vl>>16,vl>>8,vl,showf); }
-void begin(uint8_t leds,uint8_t can,uint8_t port)
-{
-  n_leds=leds;
-  ramled=(uint32_t*)malloc((leds*24*4)+4); ramtable=(uint32_t*)malloc(leds*4);
-  T0H=(400/25); T0L=(850/25); T1H=(800/25); T1L=(450/25);
-  CH_RMT_TX=can;
-  GPIO=port;
-  rmt_config_t config = {
-    .rmt_mode = RMT_MODE_TX,
-    .channel = static_cast<rmt_channel_t>(CH_RMT_TX),
-    .gpio_num = static_cast<gpio_num_t>(GPIO), 
-    .mem_block_num = 3
-  }; 
-  config.clk_div = 2; // 80000000/2, 1 step=25nseg
-  rmt_config(&config); rmt_driver_install(config.channel, 0, 0);
-  clear(); show(); 
+void begin(uint8_t leds,uint8_t can,uint8_t port){
+  n_leds=leds; ramled=(uint32_t*)malloc((leds*24*4)+4); ramtable=(uint32_t*)malloc(leds*4);
+  T0H=(400/25); T0L=(850/25); T1H=(800/25); T1L=(450/25); CH_RMT_TX=can; GPIO=port;
+  rmt_config_t config = {.rmt_mode = RMT_MODE_TX,.channel = static_cast<rmt_channel_t>(CH_RMT_TX),.gpio_num = static_cast<gpio_num_t>(GPIO),.mem_block_num = 3 }; 
+  config.clk_div = 2; /* 80Mhz/2,step=25nseg */ rmt_config(&config); rmt_driver_install(config.channel, 0, 0); clear(); 
 }
 } ws2812b;
  
