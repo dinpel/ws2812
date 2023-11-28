@@ -17,10 +17,9 @@ ws2812b.rgb(13,0x20,0x20,0); ws2812b.rgb(14,0x20,0x20,0); ws2812b.led(15,0x20200
 for(int j=0;j<2;j++){ 
   for(int i=0;i<50;i++){ delay(125); ws2812b.rotate(1); }
   for(int i=0;i<50;i++){ delay(40); ws2812b.rotate(-1); }
-}
-ws2812b.clear(); delay(1000); 
+}  
 for(int i=0;i<2;i++){
-  for(int j=0;j<ws2812b.n_leds;j++){ ws2812b.led(j,0xff0000,true); delay(100); }  
-  for(int j=ws2812b.n_leds-1;j>=0;j--){ ws2812b.led(j,0x0000ff,true); delay(100); } 
+  for(int j=0;j<ws2812b.n_leds;j++){ ws2812b.led(j,0xff0000,true); delay(100); }  ws2812b.clear(); delay(250);
+  for(int j=ws2812b.n_leds-1;j>=0;j--){ ws2812b.led(j,0x0000ff,true); delay(100); } ws2812b.clear(); delay(250);
 }
 }
