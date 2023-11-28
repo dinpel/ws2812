@@ -1,5 +1,5 @@
  /*
-  driver to controller strip of leds type ws2812
+  driver to controller strip of leds type ws2812 (Rev.2 28/11/2023)
   create by dinpel@hotmail.com
   when include dip_ws2812.h, create object named ws2812b
   
@@ -28,19 +28,13 @@ private:
   uint8_t CH_RMT_TX; //static_cast<rmt_channel_t>(1)
   uint8_t GPIO; //static_cast<gpio_num_t>(4)
 void show(){
-  uint32_t *tabla=(uint32_t *)ramtabla;
+  uint32_t *tabla=(uint32_t *)ramtabla,*dest=(uint32_t *)ramled; 
   rmt_item32_t rmt_tmp;
-  uint32_t *dest=(uint32_t *)ramled; 
-  *dest++=3<<16|4000; //reset 
-  for (uint32_t led = 0;led<n_leds;led++) {
-    uint32_t be=*(tabla+led),m=0x800000; 
-    while (m) { 
-      rmt_tmp = (be&m) ? (rmt_item32_t){{{T1H, 1, T1L, 0}}} : (rmt_item32_t){{{T0H, 1, T0L, 0}}};
-      *dest++=rmt_tmp.val; m>>=1;
-    }
-  }
-  rmt_write_items(static_cast<rmt_channel_t>(CH_RMT_TX),(const rmt_item32_t*)ramled,((16 * 24)+1), false);
+  *dest++=(3<<16)|4000; //reset 50 microseg.
+  for (uint32_t led = 0;led<n_leds;led++) {  uint32_t be=*(tabla+led),m=0x800000; 
+    while (m) { rmt_tmp = (be&m) ? (rmt_item32_t){{{T1H, 1, T1L, 0}}} : (rmt_item32_t){{{T0H, 1, T0L, 0}}}; *dest++=rmt_tmp.val; m>>=1;} }
   rmt_wait_tx_done(static_cast<rmt_channel_t>(CH_RMT_TX), portMAX_DELAY);
+  rmt_write_items(static_cast<rmt_channel_t>(CH_RMT_TX),(const rmt_item32_t*)ramled,((n_leds*24)+1), false);
 }
 public:
   WS2812(){}
