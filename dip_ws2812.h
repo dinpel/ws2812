@@ -44,9 +44,8 @@ void rotate(int8_t pasos=1){
 }
 void clear(uint32_t vl=0){ for(int i=0;i<n_leds;i++) rgb(i,(vl&0xff0000)>>16,(vl&0xff00)>>8,vl); show(); } // off all leds
 void times(uint32_t t0h,uint32_t t0l,uint32_t t1h,uint32_t t1l){ 
-  RESET=(rmt_item32_t){1,1,2000, 0}.val; 
-  ZERO=(rmt_item32_t){t0h/25,1,t0l/25,0}.val; ONE=(rmt_item32_t){t1h/25,1,t1l/25,0}.val; 
-  }
+ RESET=2000<<16|0x8000|1; ZERO=(t0l/25)<<16|0x8000|(t0h/25); ONE=(t1l/25)<<16|0x8000|(t1h/25); 
+}
 void rgb(uint8_t nl,uint8_t r,uint8_t g,uint8_t b,bool showf=false){ if (nl<n_leds) { *((uint32_t *)ramtable+nl)=g<<16|r<<8|b; if (showf) show(); } }
 void led(uint8_t nl,uint32_t vl,bool showf=false){  if (nl<n_leds) rgb(nl,vl>>16,vl>>8,vl,showf); }
 void begin(uint8_t leds,uint8_t can,uint8_t port){

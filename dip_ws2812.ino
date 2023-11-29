@@ -5,6 +5,7 @@ WS2812 l12,l16;
 void setup(){
 l16.begin(16,0,15);  
 l12.begin(12,3,16);  
+Serial.begin(115200);
 }
 
 void loop(){
@@ -15,7 +16,6 @@ l12.clear(0x33); l16.clear(0xFF); delay(500);
 
 l12.clear(); for(int j=0;j<l12.n_leds;j+=3) l12.led(j,0x111100,true);
  
-
 l16.led(0,0); 
 l16.rgb(1,70,0,0); l16.rgb(2,70,0,0);  l16.rgb(3,70,0,0); //led position,red,green,blue 
 l16.led(4,0); 
